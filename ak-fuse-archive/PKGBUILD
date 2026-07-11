@@ -1,6 +1,7 @@
 # Maintainer: envolution
 # Contributor: Cody Schafer <dev at codyps.com>
 # shellcheck shell=bash disable=SC2034,SC2154
+_srcname=fuse-archive
 pkgname=ak-fuse-archive
 pkgver=1.22
 pkgrel=1
@@ -15,21 +16,21 @@ depends=(
   gcc-libs)
 makedepends=(boost)
 checkdepends=(python)
-source=("$pkgname-$pkgver.tar.gz::https://github.com/google/fuse-archive/archive/refs/tags/v${pkgver}.tar.gz")
+source=("$_srcname-$pkgver.tar.gz::https://github.com/google/fuse-archive/archive/refs/tags/v${pkgver}.tar.gz")
 sha256sums=('a3c77e06b9c808352a4e2ee5c7de84f8b52849a604f0154cc9049205d0a603a0')
 
 build() {
-  cd "$pkgname-$pkgver"
+  cd "$_srcname-$pkgver"
   make
 }
 
 check() {
-  cd "$pkgname-$pkgver"
+  cd "$_srcname-$pkgver"
   # make -k check #skip due to a couple mtime issues
 }
 
 package() {
-  cd "$pkgname-$pkgver"
+  cd "$_srcname-$pkgver"
   make DESTDIR="$pkgdir/" install
   install -Dm644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
   install -Dm644 README.md "$pkgdir/usr/share/doc/$pkgname/README.md"
