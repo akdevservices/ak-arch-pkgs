@@ -1,0 +1,53 @@
+# Maintainer: Jordan Day <jordanday 4 4 4 at gmail dot com>
+# Contributor: Jeff Cook <jeff@deserettechnology.com>
+# Contributor: Michael Asher < michael at we solve every thing dot com >
+# Contributor: William Díaz <wdiaz@archlinux.us>
+# Contributor: adminempier <jl@adminempire.com>
+### I AM ONLY THE PACKAGER, NOT THE DEVELOPER
+### Please ask support questions about this software in one of:
+###   1) The AUR comments; OR
+###   2) Upstream forums/maillist etc; OR
+###   3) The ArchLinux forums
+### I do not always know enough about the software itself, or don't have the
+### time to promptly respond to direct emails.
+### If you have found a problem with the package/PKGBUILD (as opposed to
+### the software) then please do email me or post an AUR comment.
+
+pkgname=ak-uuid
+_pkgname=ossp-uuid
+pkgver=1.6.2
+pkgrel=20
+pkgdesc="OSSP Universally Unique Identifier"
+arch=('i686' 'x86_64' 'armv6h' 'armv7h' 'aarch64')
+url="http://www.ossp.org/pkg/lib/uuid"
+license=('MIT')
+depends=('sh')
+makedepends=('git')
+conflicts=(uuid)
+options=('!libtool')
+source=(
+    "git+https://github.com/akdevservices/ossp-uuid.git"
+    ossp.patch
+    uuid-aarch64.patch
+)
+sha256sums=(
+    'SKIP'
+    '51abfe1e651a3b9bdf52fdef3dbec2c1daf40da72bd3c84be51ef492be824848'
+    'e86c5a94d33f682853ecc12b6885309e4cf4ae96ac933b4f947326ef9772594f'
+)
+
+build() {
+  unset PERL_MM_OPT
+  cd "${srcdir}/${_pkgname}"
+  # Rename because conflicts with util-linux
+  patch -p1 -i "${srcdir}"/ossp.patch
+  patch -p1 -i "${srcdir}"/uuid-aarch64.patch
+  ./configure --prefix=/usr --with-perl
+  make
+}
+
+package() {
+  cd "${_pkgname}"
+  make DESTDIR="${pkgdir}" install
+  install -Dm644 README  "${pkgdir}"/usr/share/licenses/"${pkgname}"/LICENSE
+}
