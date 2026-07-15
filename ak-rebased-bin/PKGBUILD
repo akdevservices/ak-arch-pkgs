@@ -45,7 +45,7 @@ if [ -r "${plugin_src}" ]; then
   fi
 fi
 
-exec /opt/rebased/bin/idea "$@"
+exec /opt/rebased/bin/rebased "$@"
 SCRIPT
 
   install -Dm644 "${app_dir}/bin/rebased.svg" "${pkgdir}/usr/share/icons/hicolor/scalable/apps/rebased.svg"
